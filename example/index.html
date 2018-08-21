@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Scroll Animation</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="box">
+        <h1>Scroll to see the effect</h1>
+    </div>
+    <div class="box">
+        <div id="element1" class="element">
+            <h2>Element 1</h2>
+            <code>Scroll.opacity("element1", 1, 0.5).start();</code>
+        </div>
+    </div>
+    <div class="box">
+        <div id="element2" class="element">
+            <h2>Element 2</h2>
+            <code>Scroll.left("element2", 40, 0.75, 0, 0.25, "%").start();</code>
+            <code>Scroll.scale("element2", 1.25, 0.5, 0, 0).start();</code>
+        </div>
+    </div>
+    <div class="box">
+        <div id="element3" class="element">
+            <h2>Element 3</h2>
+            <code>Scroll.rotation("element3", 360).setUnit("deg").start();</code>
+        </div>
+    </div>
+    <div class="box">
+        <div id="element4" class="element">
+            <h2>Element 4</h2>
+            <code>Scroll.width("element4")<br>
+                .setUnit("%")<br>
+                .setEnd({<br>
+                values: [80],<br>
+                offset: 0.9<br>
+                })<br>
+                .setStart({<br>
+                values: [30],<br>
+                offset: 0.1<br>
+                })<br>
+                .start();
+            </code>
+        </div>
+    </div>
+
+<script src="../dist/ssa.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+.box{
+    height: 1000px;
+    background-color: #00baff;
+}
+
+body, .box{
+    margin: 0;
+    padding: 0;
+}
+
+h1{
+    font-family: Helvetica, Arial, sans-serif;
+    color: #63058b;
+    text-align: center;
+    margin: 0;
+    padding: 100px;
+}
+
+.element{
+    padding: 20px;
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    justify-items: center;
+    justify-content: center;
+    background-color: #63058b;
+    font-family: Helvetica, Arial, sans-serif;
+    color: white;
+}
+
+#element1, #element3, #element4{
+    margin: auto;
+}
+
+#element2{
+    position: relative;
+    transform: translateX(-50%);
+}
