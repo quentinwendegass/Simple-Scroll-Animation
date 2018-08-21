@@ -7,7 +7,7 @@
     Scroll.scale("element2", 1.25, 0.5, 0, 0).start();
 
     // Element 3
-    Scroll.rotation("element3", 360).setUnit("deg").start();
+    Scroll.rotate("element3", 360).setUnit("deg").start();
 
     //Element 4
     Scroll.width("element4")

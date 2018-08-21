@@ -12,33 +12,39 @@ let Scroll = (function () {
         this.name = "WrongArgumentException";
     };
 
+
+    // Helper function to create the mapper
+    let mapperFuncBuilder = function(prefix, unit){
+        let preVal = "";
+        let postVal = "";
+        let isUnit = unit;
+
+        if(prefix){
+            preVal = prefix + "(";
+            postVal += ")";
+        }
+
+       return function (vals, unit) {
+           if(isUnit){
+               return preVal + vals[0] + unit + postVal;
+           }else{
+               return preVal + vals[0] + postVal;
+           }
+       }
+    };
+
     // Predefined mapper functions
     let mapper = {
-        rotate: function(val){
-            return `rotate(${val[0]}deg)`;
-        },
-        translateX: function(val, unit){
-            return `translateX(${val[0] + unit})`;
-        },
-        translateY: function(val, unit){
-            return `translateY(${val[0] + unit})`
-        },
-        scale: function (val) {
-            return `scale(${val[0]})`;
-        },
-        scaleX: function (val) {
-            return `scaleX(${val[0]})`;
-        },
-        scaleY: function (val) {
-            return `scaleY(${val[0]})`;
-        },
-        default: function(val){
-            return val[0];
-        },
-        defaultWithUnit: function(val, unit){
-            return val[0] + unit;
-        }
+        rotate: mapperFuncBuilder("rotate", true),
+        translateX: mapperFuncBuilder("translateX", true),
+        translateY: mapperFuncBuilder("translateY", true),
+        scale: mapperFuncBuilder("scale", false),
+        scaleX: mapperFuncBuilder("scaleX", false),
+        scaleY: mapperFuncBuilder("scaleY", false),
+        default: mapperFuncBuilder(false, false),
+        defaultWithUnit: mapperFuncBuilder(false, true),
     };
+
 
     // Helper function to create the different constructor functions with different styles
     let animationFuncBuilder = function(style){
@@ -49,7 +55,6 @@ let Scroll = (function () {
             return createAnimation(elementId, style, endValue, endOffset, startValue, startOffset, unit)
         }
     };
-
 
     // Predefined constructor functions for different style animations
     let rotateAnimation = animationFuncBuilder({property: "transform", valueMapper: mapper.rotate});
@@ -168,7 +173,7 @@ let Scroll = (function () {
                 return this;
             },
 
-            // Setter for start obj with checking
+            // Setter for start point with checking
             setStart: function(startObj){
                 checkStartEndObj(startObj);
                 this.startPoint = startObj;
@@ -176,7 +181,7 @@ let Scroll = (function () {
             },
 
 
-            // Setter for end obj with checking
+            // Setter for end point with checking
             setEnd: function(endObj){
                 checkStartEndObj(endObj);
                 this.endPoint = endObj;

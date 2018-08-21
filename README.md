@@ -14,8 +14,8 @@ Just clone this repository and open up the `index.html`.
 
 
 ## Usage
-To add an animation to an element you have to give it an ID in your html markup. 
-The `createAnimation()` function let you add an animation to your element. After that you get an **AnimationObj**, that let's you start the animation by calling `start()`.
+To add an animation to an element you have to give it an ID. 
+The `createAnimation()` function creates an animation object of your element. You can start the animation by calling the `start()` function of the animation object.
 
 ```javascript
 Scroll.createAnimation(elementId, style, endValues, endOffset, startValues, startOffset, unit).start();
@@ -24,7 +24,7 @@ The elementId and style must be provided. The rest of the arguments are optional
 
 | Argument      | Description   | Type  |  Default |
 |:-------------:|:-------------:|:-----:|:-----:|
-| elementId     | The Id of the element in the dom (without #)| String | No default |
+| elementId     | The Id of the element (without #)| String | No default |
 | style         | Object with the css property and a valueMapper |  Object `{property: String, valueMapper: function}` | No default |
 | endValues     | Numbers in an array that represent the value at the end of the animation |    Array(Numbers)| [0]
 | endOffset     | Offset from the bottom of the viewport where the animation should end (in percent 0-1)      |    Number | 1
@@ -34,7 +34,7 @@ The elementId and style must be provided. The rest of the arguments are optional
 
 
 ### Style
-The style defines what css property should be changed. 
+The style defines what css property gets changed. 
 
  ```javascript
  {
@@ -45,7 +45,7 @@ The style defines what css property should be changed.
  
  The property is used to change the style object of an node. It has to be lower camel case f.e. BackgroundColor, borderRadius, ...
  
- The value mapper is a function that returns the value. The mapper has the value array and the unit as an argument.
+ The value mapper is a function that returns the value. The mapper gets the values and the unit as an argument.
   
   For example: 
   
@@ -75,7 +75,7 @@ element passes the top of the viewport.
 
 
 ### Predefined Animations
-There are several predefined animations so you don't have to write every time a style. This functions take the same arguments as `createAnimation()` except it don't take a style and the **values don't have to be an array**.
+There are several predefined animations so you don't have to write every time a style. This functions take the same arguments as `createAnimation()` except it doesn't take a style and the **values don't have to be an array**.
 
 ```javascript
 Scroll.width(elementId, endValue, endOffset, startValue, startOffset, unit)
@@ -104,7 +104,7 @@ Scroll.rotate("element", 180).start();
 
 
 ### Extra
-Unit and the start/end points can be set through an setter on the animation object.
+Unit and the start/end points can be set through an setter on the animation object which returns it self.
 
 ```javascript
 Scroll.opacity("element")
