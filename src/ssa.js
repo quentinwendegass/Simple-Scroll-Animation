@@ -52,7 +52,7 @@ let Scroll = (function () {
 
 
     // Predefined constructor functions for different style animations
-    let rotationAnimation = animationFuncBuilder({property: "transform", valueMapper: mapper.rotate});
+    let rotateAnimation = animationFuncBuilder({property: "transform", valueMapper: mapper.rotate});
     let opacityAnimation = animationFuncBuilder({property: "opacity", valueMapper: mapper.default});
     let translateXAnimation = animationFuncBuilder({property: "transform", valueMapper: mapper.translateX});
     let translateYAnimation = animationFuncBuilder({property: "transform", valueMapper: mapper.translateY});
@@ -219,7 +219,7 @@ let Scroll = (function () {
     // Export functions that should be available in the namespace object
     return {
         createAnimation: createAnimation,
-        rotation: rotationAnimation,
+        rotate: rotateAnimation,
         opacity: opacityAnimation,
         translateX: translateXAnimation,
         translateY: translateYAnimation,

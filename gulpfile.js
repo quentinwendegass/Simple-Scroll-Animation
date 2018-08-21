@@ -19,7 +19,6 @@ gulp.task('minify-js', function(){
 
 gulp.task('watch', function() {
     gulp.watch(config.srcDir + '/' + config.jsPattern, ['minify-js']);
-
 });
 
 gulp.task('server', function(done) {
