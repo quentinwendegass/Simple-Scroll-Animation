@@ -6,7 +6,7 @@ let Scroll = (function () {
     // Array of Objects that are animated during scroll
     let animationObjects = [];
 
-    // Exception for createAnimation
+    // Exception for AnimationObject
     let WrongArgumentsException = function(message) {
         this.message = message;
         this.name = "WrongArgumentException";
@@ -52,7 +52,7 @@ let Scroll = (function () {
             endValue = endValue ? [endValue] : null;
             startValue = startValue ? [startValue] : null;
 
-            return createAnimation(elementId, style, endValue, endOffset, startValue, startOffset, unit)
+            return new AnimationObject(elementId, style, endValue, endOffset, startValue, startOffset, unit);
         }
     };
 
@@ -79,7 +79,7 @@ let Scroll = (function () {
     // End and start offset must be a float number that sets the offset in percentage from the bottom of the viewport (0 is 0% and 1 is 100% from to bottom).
     // The end and start values must be a numeric type.
     // Unit is default set to px, but can be changed f.e. to em or %
-    let createAnimation = function(elementId, style, endValues, endOffset, startValues, startOffset, unit){
+    let AnimationObject = function(elementId, style, endValues, endOffset, startValues, startOffset, unit){
 
         // The function will throw an Error if there is not an element id and a style passed
         if(arguments.length < 2) throw new WrongArgumentsException("Not enough arguments provided!");
@@ -94,11 +94,6 @@ let Scroll = (function () {
             throw new WrongArgumentsException("Wrong style argument!");
         }
 
-        // Setting the default values if the values is undefined (falsy).
-        // The default unit is px
-        startOffset = startOffset || 0;
-        endOffset = endOffset || 1;
-
         // Values must be an array of numbers.
         endValues = endValues || [0];
         startValues = startValues || Array.apply(null, Array(endValues.length)).map(function () { return 0; });
@@ -107,93 +102,90 @@ let Scroll = (function () {
             throw new WrongArgumentsException("Start and end values must be an array!")
         }
 
-        unit = unit || "px";
+        // Dom element that should be animated
+        this.element = document.getElementById(elementId);
 
-        // Returns the animation object
-        return {
-            // Dom element that should be animated
-            element: document.getElementById(elementId),
+        // Start state of the animation
+        this.startPoint = {
+            // Setting the default values if the values is undefined (falsy).
+            offset: startOffset || 0,
+            values: startValues
+        };
 
-            // Start state of the animation
-            startPoint: {
-                offset: startOffset,
-                values: startValues
-            },
+        // End state of the animation
+        this.endPoint = {
+            // Setting the default values if the values is undefined (falsy).
+            offset: endOffset || 1,
+            values: endValues
+        };
 
-            // End state of the animation
-            endPoint: {
-                offset: endOffset,
-                values: endValues
-            },
+        // Unit is default set to px
+        this.unit = unit || "px";
 
-            // Unit is default set to px
-            unit: unit,
+        // Defines witch property should be animated. Must be defined.
+        this.style = style;
+    };
 
-            // Defines witch property should be animated
-            style: style,
+    // Function that is called when the page is scrolling
+    AnimationObject.prototype.animate = function () {
 
-            // Function that is called when the page is scrolling
-            animate: function () {
+        //Set element style to start value to have the same bounding box every frame
+        this.element.style[this.style.property] = this.style.valueMapper(this.startPoint.values, this.unit);
 
-                //Set element style to start value to have the same bounding box every frame
-                this.element.style[this.style.property] = this.style.valueMapper(this.startPoint.values, this.unit);
+        // Offset converted to px
+        let startOffset = this.startPoint.offset * clientHeight;
+        let endOffset = this.endPoint.offset * clientHeight;
 
-                // Offset converted to px
-                let startOffset = this.startPoint.offset * clientHeight;
-                let endOffset = this.endPoint.offset * clientHeight;
+        // Bottom is the height from the bottom of the viewport to the element top
+        let bottom = clientHeight - this.element.getBoundingClientRect().y;
 
-                // Bottom is the height from the bottom of the viewport to the element top
-                let bottom = clientHeight - this.element.getBoundingClientRect().y;
+        // Set the style of the element
+        if(bottom > startOffset && bottom < endOffset){
 
-                // Set the style of the element
-                if(bottom > startOffset && bottom < endOffset){
+            // Sets the progress based on the scroll height of the element
+            let progress = (bottom - startOffset) / (endOffset - startOffset);
 
-                    // Sets the progress based on the scroll height of the element
-                    let progress = (bottom - startOffset) / (endOffset - startOffset);
+            // The values of the style based on the progress
+            let values = this.startPoint.values.map(function (val, index) {
+                return val + progress * (this.endPoint.values[index] - val);
+            }.bind(this));
 
-                    // The values of the style based on the progress
-                    let values = this.startPoint.values.map(function (val, index) {
-                        return val + progress * (this.endPoint.values[index] - val);
-                    }.bind(this));
-
-                    this.element.style[this.style.property] = this.style.valueMapper(values, this.unit);
-                }else if(bottom < startOffset){
-                    this.element.style[this.style.property] = this.style.valueMapper(this.startPoint.values, this.unit);
-                }else if(bottom > endOffset){
-                    this.element.style[this.style.property] = this.style.valueMapper(this.endPoint.values, this.unit);
-                }
-            },
-
-            // Setter for unit. Returns this object
-            setUnit: function(unit){
-                if (!unit || typeof unit !== "string"){
-                    throw new WrongArgumentsException("Unit is not a valid type!");
-                }
-                this.unit = unit;
-                return this;
-            },
-
-            // Setter for start point with checking
-            setStart: function(startObj){
-                checkStartEndObj(startObj);
-                this.startPoint = startObj;
-                return this;
-            },
-
-
-            // Setter for end point with checking
-            setEnd: function(endObj){
-                checkStartEndObj(endObj);
-                this.endPoint = endObj;
-                return this;
-            },
-
-            // Adds the animation object to the list that is animated on scroll
-            start: function () {
-                animationObjects.push(this);
-            }
+            this.element.style[this.style.property] = this.style.valueMapper(values, this.unit);
+        }else if(bottom < startOffset){
+            this.element.style[this.style.property] = this.style.valueMapper(this.startPoint.values, this.unit);
+        }else if(bottom > endOffset){
+            this.element.style[this.style.property] = this.style.valueMapper(this.endPoint.values, this.unit);
         }
     };
+
+    // Setter for unit. Returns this object
+    AnimationObject.prototype.setUnit = function(unit){
+        if (!unit || typeof unit !== "string"){
+            throw new WrongArgumentsException("Unit is not a valid type!");
+        }
+        this.unit = unit;
+        return this;
+    };
+
+    // Setter for start point with checking
+    AnimationObject.prototype.setStart = function(startObj){
+        checkStartEndObj(startObj);
+        this.startPoint = startObj;
+        return this;
+    };
+
+    // Setter for end point with checking
+    AnimationObject.prototype.setEnd = function(endObj){
+        checkStartEndObj(endObj);
+        this.endPoint = endObj;
+        return this;
+    };
+
+    // Adds the animation object to the list that is animated on scroll
+    AnimationObject.prototype.start = function () {
+        animationObjects.push(this);
+    };
+
 
     // Type checking of the start and end object
     function checkStartEndObj(obj){
@@ -223,7 +215,7 @@ let Scroll = (function () {
 
     // Export functions that should be available in the namespace object
     return {
-        createAnimation: createAnimation,
+        AnimationObject: AnimationObject,
         rotate: rotateAnimation,
         opacity: opacityAnimation,
         translateX: translateXAnimation,

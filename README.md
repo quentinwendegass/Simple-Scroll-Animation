@@ -15,10 +15,10 @@ Just clone this repository and open up the `index.html`.
 
 ## Usage
 To add an animation to an element you have to give it an ID. 
-The `createAnimation()` function creates an animation object of your element. You can start the animation by calling the `start()` function of the animation object.
+The `AnimationObject` creates an animation object of your element. You can start the animation by calling the `start()` function of the animation object.
 
 ```javascript
-Scroll.createAnimation(elementId, style, endValues, endOffset, startValues, startOffset, unit).start();
+new Scroll.AnimationObject(elementId, style, endValues, endOffset, startValues, startOffset, unit).start();
 ```
 The elementId and style must be provided. The rest of the arguments are optional.
 
@@ -75,7 +75,7 @@ element passes the top of the viewport.
 
 
 ### Predefined Animations
-There are several predefined animations so you don't have to write every time a style. This functions take the same arguments as `createAnimation()` except it doesn't take a style and the **values don't have to be an array**.
+There are several predefined animations that are creating an AnimationObject, so you don't have to write every time a style. These functions take the same arguments as the AnimationObject except they don't take a style and the **values don't have to be an array**.
 
 ```javascript
 Scroll.width(elementId, endValue, endOffset, startValue, startOffset, unit)
