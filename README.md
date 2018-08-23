@@ -104,7 +104,7 @@ Scroll.rotate("element", 180).start();
 
 
 ### Extra
-Unit and the start/end points can be set through an setter on the animation object which returns it self.
+Unit and the start/end points can also be set with a setter function that supports chaining.
 
 ```javascript
 Scroll.opacity("element")
