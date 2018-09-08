@@ -4,10 +4,10 @@
   "description": "On scroll animation library",
   "main": "dist/ssa-min.js",
   "dependencies": {
-    "gulp": "^3.9.1",
-    "gulp-minify": "^3.1.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-minify": "^3.1.0"},
   "scripts": {
   },
   "author": "Quentin Wendegass",
