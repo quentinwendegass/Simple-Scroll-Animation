@@ -7,6 +7,14 @@ It's just the basics and nothing more complex, so the minified version is **only
 ## Installation
 To use this library in your project just download `ssa.js` or the minified version `ssa-min.js` from the /dist directory and include it in your project.
 
+Or if you want include it via a **CDN**:
+ 
+`<script src="https://unpkg.com/simple-scroll-animation@1.0.1/dist/ssa-min.js"><script/>`
+
+Or with **NPM**:
+
+`npm i simple-scroll-animation`
+
 
 ## Sample Project
 In the examples folder is a sample project to show you how it works and what you can do with the library. 
@@ -37,7 +45,7 @@ The elementId and style must be provided. The rest of the arguments are optional
 The style defines what css property gets changed. 
 
  ```javascript
- {
+{
     property: 'string', 
     valueMapper: 'function'
 }
