@@ -1,7 +1,11 @@
-let Scroll = (function () {
+let Scroll = (function (window) {
+
+    if(!window){
+        throw new Error("This library can only be used in an environment where a window with a document is present!");
+    }
 
     // Height of the window viewport without scrollbar
-    let clientHeight = document.documentElement.clientHeight;
+    let clientHeight = window.document.documentElement.clientHeight;
 
     // Array of Objects that are animated during scroll
     let animationObjects = [];
@@ -24,13 +28,13 @@ let Scroll = (function () {
             postVal += ")";
         }
 
-       return function (vals, unit) {
-           if(isUnit){
-               return preVal + vals[0] + unit + postVal;
-           }else{
-               return preVal + vals[0] + postVal;
-           }
-       }
+        return function (vals, unit) {
+            if(isUnit){
+                return preVal + vals[0] + unit + postVal;
+            }else{
+                return preVal + vals[0] + postVal;
+            }
+        };
     };
 
     // Predefined mapper functions
@@ -53,7 +57,7 @@ let Scroll = (function () {
             startValue = startValue ? [startValue] : null;
 
             return new AnimationObject(elementId, style, endValue, endOffset, startValue, startOffset, unit);
-        }
+        };
     };
 
     // Predefined constructor functions for different style animations
@@ -99,11 +103,11 @@ let Scroll = (function () {
         startValues = startValues || Array.apply(null, Array(endValues.length)).map(function () { return 0; });
 
         if(!Array.isArray(endValues) || !Array.isArray(startValues)){
-            throw new WrongArgumentsException("Start and end values must be an array!")
+            throw new WrongArgumentsException("Start and end values must be an array!");
         }
 
         // Dom element that should be animated
-        this.element = document.getElementById(elementId);
+        this.element = window.document.getElementById(elementId);
 
         // Start state of the animation
         this.startPoint = {
@@ -200,7 +204,7 @@ let Scroll = (function () {
 
     // Animates all objects that are in the animationObjects list.
     // For adding one start() on the object should be called
-    document.addEventListener("scroll", function () {
+    window.document.addEventListener("scroll", function () {
         animationObjects.forEach(function (obj) {
             obj.animate();
         });
@@ -209,7 +213,7 @@ let Scroll = (function () {
 
     // Set new viewport height if the window is resizing
     window.addEventListener("resize", function () {
-        clientHeight = document.documentElement.clientHeight;
+        clientHeight = window.document.documentElement.clientHeight;
     });
 
 
@@ -229,5 +233,5 @@ let Scroll = (function () {
         right: rightAnimation,
         width: widthAnimation,
         height: heightAnimation
-    }
-})();
+    };
+})(typeof window !== "undefined" ? window : null);
