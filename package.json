@@ -1,6 +1,6 @@
 {
   "name": "simple-scroll-animation",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "On scroll animation library",
   "main": "dist/ssa-min.js",
   "dependencies": {},
